@@ -1,0 +1,16 @@
+h1 {
+  color: red;
+  font-size: 20px;
+}
+
+.warna-biru {
+  color: blue
+}
+
+.warna-hijau {
+  color: green
+}
+
+#warna-kuning {
+  color: yellow
+}

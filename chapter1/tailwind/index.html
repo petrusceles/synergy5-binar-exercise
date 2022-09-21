@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style type="text/tailwindcss">
+      @layer utilities {
+        .content-auto {
+          content-visibility: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <button
+      class="bg-gradient-to-r from-red-600 via-green-600 to-yellow-200 hover:from-blue-600 hover:to-blue-200 px-10 py-2 text-white rounded hover:bg-red-500 focus:bg-red-700"
+    >
+      Halo
+    </button>
+    <button>asdasd</button>
+    <button class="bg-primary">Button Primary</button>
+    <button class="bg-green-600 text-primary">Button Primary</button>
+    <button class="bg-primary">Button Primary</button>
+    <button class="bg-primary">Button Primary</button>
+    <div>
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4">
+        <div>01</div>
+        <div>02</div>
+        <div>03</div>
+        <div>04</div>
+        <div>05</div>
+      </div>
+    </div>
+  </body>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#A41DA9'
+          }
+        }
+      }
+    };
+  </script>
+</html>
