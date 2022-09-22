@@ -40,6 +40,11 @@ p {
   padding: 10px;
 }
 
+.padding-flexible {
+  padding-left: 200px;
+  padding-right: 200px;
+}
+
 @media only screen and (max-width: 480px) {
   .nav-desktop {
     display: none !important;
@@ -87,6 +92,11 @@ p {
   .box {
     padding: 10px;
     width: 300px;
+  }
+
+  .padding-flexible {
+    padding-left: 0px;
+    padding-right: 0px;
   }
 }
 
