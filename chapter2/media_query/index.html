@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Media Query Dasar</title>
+    <style>
+      html {
+        font-size: 10px;
+      }
+
+      @media (max-width: 600px) {
+        body {
+          background-color: lightblue;
+        }
+
+        h1 {
+          font-size: 10px;
+        }
+      }
+
+      @media (max-width: 320px) {
+        body {
+          background-color: gray;
+        }
+
+        h1 {
+          font-size: 30px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div style="font-size: 50px">
+      <h1 class="d-sm-none">Halo binar 1</h1>
+      <h1 style="font-size: 3em">Halo binar 2</h1>
+      <h1 style="font-size: 3rem">Halo binar 3</h1>
+      <h1 style="font-size: 30px">Halo binar 4</h1>
+      <h1 style="font-size: 25px">Halo binar 5</h1>
+    </div>
+  </body>
+</html>
