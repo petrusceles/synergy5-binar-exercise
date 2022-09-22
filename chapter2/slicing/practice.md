@@ -1,1 +1,1 @@
-Design: ([Open](https://htmlpreview.github.io/?https://github.com/rrafids/synergy5-binar-exercise/blob/master/chapter2/slicing/qiscus/pages/index.html))
+Design: [Open](https://htmlpreview.github.io/?https://github.com/rrafids/synergy5-binar-exercise/blob/master/chapter2/slicing/qiscus/pages/index.html)
