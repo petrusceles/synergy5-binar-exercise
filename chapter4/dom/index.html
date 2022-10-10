@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Latihan DOM</title>
+  </head>
+  <body style="background-color: green">
+    <h2 name="rafid">Ini tag name</h2>
+    <div id="container">
+      <h1 id="title-main">Latihan DOM</h1>
+    </div>
+    <h2 class="title">Ini h2</h2>
+    <h3 class="title">Ini h3</h2>
+    <button onClick="tambahElement()">Tambah Element</button>
+    <button onClick="hapusElement()">Hapus Element</button>
+    <!--  buat tag baru  -->
+  </body>
+
+  <script>
+    // Get by query selector
+    // const classTitle = document.querySelector("#container");
+    // console.log(classTitle);
+
+    // // Get by name
+    // const tagName = document.getElementsByName('rafid');
+    // console.log(tagName[0]);
+
+    // // Get by id & className
+    // const tagTitleCollection = document.getElementsByClassName('title');
+    // const tagTitleArray = [...tagTitleCollection];
+
+    // setInterval(() => {
+    //   tagTitleArray[0].style.color = "blue"
+    //   tagTitleArray[1].style.color = "blue"
+    //   tagTitleArray[2].style.color = "blue"
+    //   setInterval(() => {
+    //     tagTitleArray[0].style.color = "white"
+    //     tagTitleArray[1].style.color = "white"
+    //     tagTitleArray[2].style.color = "white"
+    //   }, 1000)
+    // }, 1000)
+
+    // // tagTitleArray.map((tag, index) => {
+    // //   if (index === 0) tag.innerText = 'Tag sudah diubah';
+    // // });
+
+    // function tambahElement() {
+    //   // const newHeader = document.createElement('button');
+    //   // newHeader.innerText = "Header baru";
+    //   // newHeader.style.color = "yellow";
+
+    //   // document.body.append(newHeader);
+
+    //   const newParagraph = document.createElement('p');
+    //   newParagraph.innerText = "Penjelasan DOM";
+    //   newParagraph.style.color = "white";
+    //   newParagraph.className = "new-paragraph"
+
+    //   const container = document.getElementById("container");
+
+    //   container.append(newParagraph);
+    // }
+
+    // function hapusElement() {
+    //   // const titleMain = document.getElementById("title-main");
+    //   const paragraphMainsCollections = document.getElementsByClassName("new-paragraph");
+
+    //   const paragraphMainsArray = [...paragraphMainsCollections];
+
+    //   console.log(paragraphMainsCollections);
+    //   console.log(paragraphMainsArray);
+      
+    //   paragraphMainsArray.map((pMain) => {
+    //     console.log(pMain)
+    //     pMain.remove();
+    //   })
+    // }
+  </script>
+</html>
