@@ -1,5 +1,6 @@
 const os = require("os");
 const fs = require("fs");
+const { area } = require("./functions/triangle");
 
 console.log("Application is runinng!");
 
