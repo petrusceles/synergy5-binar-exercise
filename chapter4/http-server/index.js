@@ -2,6 +2,7 @@ const http = require('http');
 const path = require("path");
 const fs = require("fs");
 const PUBLIC_DIRECTORY = path.join(__dirname, 'public')
+const DATA_DIRECTORY = path.join(__dirname, 'data')
 
 const getHTML = (fileName) => {
   const htmlFileIndex = path.join(PUBLIC_DIRECTORY, fileName);
@@ -29,17 +30,36 @@ const onRequest = (req, res) => {
 
       return
     case "/json":
-      const person = {
-        name: 'Aldi',
-        age: 100
-      }
+      const personJSON = JSON.stringify({
+        name: "Aldi",
+        age: 99
+      }); // object js ke json
 
-      const personJSON = JSON.stringify(person); // object js ke json
       // JSON.parse(person) // json ke object js
 
       res.setHeader('Content-Type', 'application/json');
       res.writeHead(200);
       res.end(personJSON);
+
+      return
+    case "/people":
+      const dataLoc = path.join(DATA_DIRECTORY, "people.json");
+      const dataJSON = fs.readFileSync(dataLoc, 'utf8');
+
+      res.setHeader('Content-Type', 'application/json');
+      res.writeHead(200);
+      res.end(dataJSON);
+
+      return
+    case "/js":
+      const dir = path.join(PUBLIC_DIRECTORY + "/scripts", "index.js");
+      const content = fs.readFileSync(dir, 'utf8');
+
+      res.setHeader('Content-Type', 'text/javascript');
+      res.writeHead(200);
+      res.end(content);
+
+      return
   }
 }
 
