@@ -1,0 +1,15 @@
+{
+  "name": "http-server-coba",
+  "version": "1.0.0",
+  "description": "coba coba aja",
+  "main": "index.js",
+  "author": "celes dong",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "dev":"nodemon index.js"
+  },
+  "dependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
