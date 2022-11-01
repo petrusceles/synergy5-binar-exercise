@@ -60,6 +60,15 @@ const onRequest = (req, res) => {
       res.end(content);
 
       return
+    case "/image-favicon.png":
+      const imgDir = path.join(PUBLIC_DIRECTORY + "/images", "favicon.png");
+      const imgContent = fs.readFileSync(imgDir);
+
+      res.setHeader('Content-Type', 'image/png');
+      res.writeHead(200);
+      res.end(imgContent, "binary");
+
+      return
   }
 }
 
