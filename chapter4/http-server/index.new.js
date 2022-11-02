@@ -1,4 +1,5 @@
 // Contoh running server html supaya tetap bisa mengakses file
+// Diperuntukkan untuk server/index.js yang ada di challenge
 const http = require('http'),
   fs = require('fs'),
   port = 2000;
