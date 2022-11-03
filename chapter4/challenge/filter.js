@@ -2,8 +2,11 @@
 async load() {
   // Contoh aja filternya cuma type
   const type = document.getElementById("type");
+  const passengerCount = document.getElementById("passenger-count");
 
-  const cars = await Binar.listCars({ type: type });
+  const filterer = { type: type.value, passengerCount: passengerCount.value }
+
+  const cars = await Binar.listCars(filterer);
   Car.init(cars);
 }
 
@@ -27,7 +30,12 @@ static async listCars(filterer) {
 
   return cars.filter((car) => {
     // Contoh aja filternya cuma type
-    if (filterer.type) return car.type === filterer.type;
+    if (filterer.type && filterer.passengerCount)
+      return car.type === filterer.type && car.passengerCount === filterer.passengerCount;
+    else if (filterer.type)
+      return car.type === filterer.type;
+    else if (filterer.passengerCount)
+      return car.passengerCount === filterer.passengerCount;
     else return car
   });
 }
