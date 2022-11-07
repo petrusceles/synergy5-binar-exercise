@@ -9,7 +9,7 @@ const users = {
         try {
             const {name, email, password,is_active} = req.body;
     
-            if (!name || !email || !password || !is_active) {
+            if (!name || !email || !password || is_active==null) {
                 return res.status(400).json({
                     message:"invalid input",
                     data:{}
@@ -33,7 +33,7 @@ const users = {
                 ...req.body
             })
             await fs.writeFile('./data.json',JSON.stringify(data))
-            res.status(200).json({
+            res.status(201).json({
                 data
             })
         } catch (err) {
@@ -74,7 +74,7 @@ const users = {
             const {id} = req.params
             const data = JSON.parse(dataUnparsed)
     
-            if (!name || !email || !password || !is_active) {
+            if (!name || !email || !password || is_active==null) {
                 return res.status(200).json({
                     message:"no data updated",
                     data
@@ -94,7 +94,7 @@ const users = {
                 data.users[index].is_active = is_active
             }
             await fs.writeFile('./data.json',JSON.stringify(data))
-            return res.status(200).json({
+            return res.status(201).json({
                 data
             })
         } catch (err) {
