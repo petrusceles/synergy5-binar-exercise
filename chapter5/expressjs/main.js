@@ -26,7 +26,7 @@ const getProductsHandler = (req, res) => {
   const maxPrice = req.query.max_price;
   const minPrice = req.query.min_price;
 
-  res.send(JSON.stringify(products.filter(product => product.price < maxPrice && product.price > minPrice)));
+  res.json(products.filter(product => product.price < maxPrice && product.price > minPrice));
 }
 
 const createProductHandler = (req, res) => {
@@ -80,7 +80,7 @@ const updateProductHandler = (req, res) => {
     return product;
   })
 
-  res.send(updatedProducts);
+  res.json(updatedProducts);
 
   return
 }
@@ -91,7 +91,7 @@ const deleteProductByIDHandler = (req, res) => {
   const filteredProduct = products.filter(product => product.id !== parseInt(id));
 
   if (filteredProduct.length === products.length) res.status(404).send("Product not found");
-  else res.send(filteredProduct);
+  else res.json(filteredProduct);
 
   return
 }
