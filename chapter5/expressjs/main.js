@@ -1,5 +1,12 @@
 const express = require('express');
 
+// Upload to Local
+// const upload = require("./helpers/fileUpload");
+
+// Upload to Cloud
+const upload = require("./helpers/fileUploadCloudinary");
+const cloudinary = require("./configs/cloudinary");
+
 const app = express();
 
 app.use(express.json());
@@ -39,13 +46,27 @@ const createProductHandler = (req, res) => {
     return;
   }
 
-  req.body.id = products[products.length - 1].id + 1
+  // Upload file to cloudinary
+  const fileToUpload = req.file;
 
-  products.push(req.body)
+  const fileBase64 = fileToUpload.buffer.toString("base64");
+  const file = `data:${fileToUpload.mimetype};base64,${fileBase64}`;
+  cloudinary.uploader.upload(file, (err, result) => {
+    if (err) {
+      res.status(400).send("Gagal mengupload file ke cloudinary");
 
-  res.status(201).send(products);
+      return
+    }
 
-  return;
+    req.body.id = products[products.length - 1].id + 1;
+    req.body.picture = result.url;
+
+    products.push(req.body)
+
+    res.status(201).send(products);
+
+    return;
+  });
 }
 
 const getProductDetailHandler = (req, res) => {
@@ -96,8 +117,20 @@ const deleteProductByIDHandler = (req, res) => {
   return
 }
 
+const isAdmin = (req, res, next) => {
+  if (req.query.role === 'admin') {
+    next();
+
+    return
+  }
+
+  res.status(401).send("Anda bukan admin");
+
+  return
+}
+
 app.get("/api/products", getProductsHandler)
-app.post("/api/products", createProductHandler)
+app.post("/api/products", isAdmin, upload.single("picture"), createProductHandler)
 app.get("/api/products/:id", getProductDetailHandler)
 app.put("/api/products/:id", updateProductHandler)
 app.delete("/api/products/:id", deleteProductByIDHandler)
