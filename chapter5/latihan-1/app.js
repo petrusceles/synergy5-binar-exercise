@@ -4,6 +4,15 @@ const app = express();
 
 app.use(express.json());
 
+class Users {
+    constructor(params) {
+        this.id = params.id;
+        this.name = params.name;
+        this.email = params.email;
+        this.password = params.password;
+    }
+}
+
 const users = {
     create: async (req,res) => {
         try {
@@ -44,9 +53,18 @@ const users = {
     },
     read: async (req,res) => {
         try {
+            let {name, email, is_active} = req.query;
+            isActiveParsed = is_active === "true"
             const dataUnparsed = await fs.readFile('./data.json','utf-8');
             const data = JSON.parse(dataUnparsed)
-            res.status(200).json(data.users)
+            console.log(`${name} | ${email} | ${is_active} \n`)
+            const filtered = data.users.filter((e) => {
+                const nameCond = name == undefined ? true : name == e.name;
+                const emailCond = email == undefined ? true : email == e.email;
+                const isActiveCond = is_active == undefined ? true : isActiveParsed == e.is_active;
+                return (nameCond && emailCond && isActiveCond)
+            })
+            res.status(200).json(filtered)
         } catch (err) {
             res.status(500).json({
                 data:err
@@ -73,14 +91,15 @@ const users = {
             const {name,email,password,is_active} = req.body;
             const {id} = req.params
             const data = JSON.parse(dataUnparsed)
-    
-            if (!name || !email || !password || is_active==null) {
+            
+            if (!name && !email && !password && is_active==null) {
                 return res.status(200).json({
                     message:"no data updated",
                     data
                 })
             }
             const index = data.users.findIndex(e => e.id == id)
+            
             if (name) {
                 data.users[index].name = name
             }
@@ -94,7 +113,7 @@ const users = {
                 data.users[index].is_active = is_active
             }
             await fs.writeFile('./data.json',JSON.stringify(data))
-            return res.status(201).json({
+            return res.status(200).json({
                 data
             })
         } catch (err) {

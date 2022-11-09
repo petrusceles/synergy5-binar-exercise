@@ -1,1 +1,1 @@
-{"users":[{"id":0,"name":"cantik","email":"cantik@mail.com","password":"halocantik","is_active":true},{"id":2,"name":"jelek","email":"jelek@mail.com","password":"halojelek","is_active":true}]}
+{"users":[{"id":0,"name":"celes","email":"cantik@mail.com","password":"halocantik","is_active":false},{"id":3,"name":"chalu","email":"halu@mail.com","password":"halohalu","is_active":false}]}
