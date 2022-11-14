@@ -1,4 +1,5 @@
 const express = require('express');
+const dbConn = require("./configs/db_connection")
 
 // Upload to Local
 // const upload = require("./helpers/fileUpload");
@@ -11,29 +12,17 @@ const app = express();
 
 app.use(express.json());
 
-const products = [
-  {
-    id: 1,
-    name: "Laptop",
-    price: 100000,
-  },
-  {
-    id: 2,
-    name: "HP",
-    price: 2000,
-  },
-  {
-    id: 3,
-    name: "Remot",
-    price: 1000,
-  }
-]
-
 const getProductsHandler = (req, res) => {
-  const maxPrice = req.query.max_price;
-  const minPrice = req.query.min_price;
+  // const maxPrice = req.query.max_price;
+  // const minPrice = req.query.min_price;
 
-  res.json(products.filter(product => product.price < maxPrice && product.price > minPrice));
+  dbConn.query("select * from products").then(function (products) {
+    res.json(products.rows);
+
+    return
+  });
+
+  // res.json(products.filter(product => product.price < maxPrice && product.price > minPrice));
 }
 
 const createProductHandler = (req, res) => {
@@ -51,70 +40,104 @@ const createProductHandler = (req, res) => {
 
   const fileBase64 = fileToUpload.buffer.toString("base64");
   const file = `data:${fileToUpload.mimetype};base64,${fileBase64}`;
+
   cloudinary.uploader.upload(file, (err, result) => {
     if (err) {
-      res.status(400).send("Gagal mengupload file ke cloudinary");
+
+      res.status(400).send(`Gagal mengupload file ke cloudinary: ${err.message}`);
 
       return
     }
 
-    req.body.id = products[products.length - 1].id + 1;
-    req.body.picture = result.url;
+    // req.body.id = products[products.length - 1].id + 1;
+    // req.body.picture = result.url;
 
-    products.push(req.body)
+    // products.push(req.body)
 
-    res.status(201).send(products);
+    dbConn.query("insert into products (name, price, stock, image) values ($1, $2, $3, $4)",
+      [req.body.name, req.body.price, req.body.stock, result.url])
+      .then(function () {
+        res.status(201).json("Berhasil insert data ke database");
 
-    return;
+        return
+      }).catch(err => {
+        res.status(500).json("Gagal insert data ke database");
+
+        return
+      });
   });
 }
 
 const getProductDetailHandler = (req, res) => {
   // id -> nge get data ke database sesuai dengan id yang dikirim user
   const { id } = req.params;
-  const filteredProduct = products.filter(product => product.id === parseInt(id));
 
-  if (filteredProduct.length === 0) res.status(404).send("Product not found");
-  else res.send(filteredProduct[0]);
+  // const filteredProduct = products.filter(product => product.id === parseInt(id));
 
-  return
+  // if (filteredProduct.length === 0) res.status(404).send("Product not found");
+  // else res.send(filteredProduct[0]);
+
+  dbConn.query("select * from products where id = $1", [id]).then(function (products) {
+    if (products.rows.length !== 0)
+      res.json(products.rows[0]);
+    else res.status(404).json("Produk tidak ditemukan");
+
+    return
+  })
 }
 
 const updateProductHandler = (req, res) => {
   const { id } = req.params;
-  const { name, price } = req.body;
+  const { name, price, stock } = req.body;
 
-  const filteredProducts = products.filter(product => product.id === parseInt(id));
+  // const filteredProducts = products.filter(product => product.id === parseInt(id));
 
-  if (filteredProducts.length === 0) {
-    res.status(404).send("Product not found");
+  // if (filteredProducts.length === 0) {
+  //   res.status(404).send("Product not found");
 
-    return
-  }
+  //   return
+  // }
 
-  const updatedProducts = products.map(product => {
-    if (product.id === parseInt(id)) {
-      product.name = name;
-      product.price = price;
-    }
+  // const updatedProducts = products.map(product => {
+  //   if (product.id === parseInt(id)) {
+  //     product.name = name;
+  //     product.price = price;
+  //   }
 
-    return product;
-  })
+  //   return product;
+  // })
 
-  res.json(updatedProducts);
+  dbConn.query("update products set name = $1, price = $2, stock = $3 where id = $4",
+    [name, price, stock, id])
+    .then(function () {
+      res.status(200).json("Berhasil update data ke database");
 
-  return
+      return
+    }).catch(err => {
+      res.status(500).json("Gagal update data ke database");
+
+      return
+    });
 }
 
 const deleteProductByIDHandler = (req, res) => {
   // id -> nge get data ke database sesuai dengan id yang dikirim user
   const id = req.param("id");
-  const filteredProduct = products.filter(product => product.id !== parseInt(id));
+  // const filteredProduct = products.filter(product => product.id !== parseInt(id));
 
-  if (filteredProduct.length === products.length) res.status(404).send("Product not found");
-  else res.json(filteredProduct);
+  // if (filteredProduct.length === products.length) res.status(404).send("Product not found");
+  // else res.json(filteredProduct);
 
-  return
+  dbConn.query("select * from products where id = $1", [id]).then(function (products) {
+    if (products.rows.length !== 0) {
+      dbConn.query("delete from products where id = $1", [id]).then(function (products) {
+        res.json("Berhasil menghapus data");
+      })
+    }
+    else res.status(404).json("Produk tidak ditemukan");
+
+    return
+  })
 }
 
 const isAdmin = (req, res, next) => {
