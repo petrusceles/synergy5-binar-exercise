@@ -17,7 +17,11 @@ const getProductsHandler = (req, res) => {
   // const minPrice = req.query.min_price;
 
   dbConn.query("select * from products").then(function (products) {
-    res.json(products.rows);
+    res.json({
+      status: "OK",
+      message: "Success retrieving data",
+      data: products.rows
+    });
 
     return
   });
@@ -30,7 +34,11 @@ const createProductHandler = (req, res) => {
 
   // Validasi payload
   if (!name || !price) {
-    res.status(400).send("Name and Price should not be empty");
+    res.status(400).send({
+      status: "BAD_REQUEST",
+      message: "Name and Price cannot be empty",
+      data: null
+    });
 
     return;
   }
@@ -79,8 +87,16 @@ const getProductDetailHandler = (req, res) => {
 
   dbConn.query("select * from products where id = $1", [id]).then(function (products) {
     if (products.rows.length !== 0)
-      res.json(products.rows[0]);
-    else res.status(404).json("Produk tidak ditemukan");
+      res.json({
+        status: "OK",
+        message: "Success retrieving data",
+        data: products.rows[0]
+      });
+    else res.status(404).json({
+      status: "NOT_FOUND",
+      message: "Product not found",
+      data: null
+    });
 
     return
   })
@@ -110,11 +126,21 @@ const updateProductHandler = (req, res) => {
   dbConn.query("update products set name = $1, price = $2, stock = $3 where id = $4",
     [name, price, stock, id])
     .then(function () {
-      res.status(200).json("Berhasil update data ke database");
+      res.status(200).json({
+        status: "OK",
+        message: "Success updating product",
+        data: {
+          id, name, price, stock
+        }
+      });
 
       return
     }).catch(err => {
-      res.status(500).json("Gagal update data ke database");
+      res.status(500).json({
+        status: "INTERNAL_SERVER_ERROR",
+        message: err.message,
+        data: null
+      });
 
       return
     });
@@ -131,10 +157,20 @@ const deleteProductByIDHandler = (req, res) => {
   dbConn.query("select * from products where id = $1", [id]).then(function (products) {
     if (products.rows.length !== 0) {
       dbConn.query("delete from products where id = $1", [id]).then(function (products) {
-        res.json("Berhasil menghapus data");
+        res.json({
+          status: "OK",
+          message: "Success deleting product",
+          data: {
+            id
+          }
+        });
       })
     }
-    else res.status(404).json("Produk tidak ditemukan");
+    else res.status(404).json({
+      status: "NOT_FOUND",
+      message: "Product not found",
+      data: null
+    });
 
     return
   })
