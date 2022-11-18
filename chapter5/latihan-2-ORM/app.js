@@ -6,7 +6,7 @@ const acceptedQueries = ['name','email','address'];
 const usersMethod = {
     create: async (req,res) => {
         try {
-            console.log(req.body)
+            // console.log(req.body)
             const {name, email, password,address} = req.body;
             
             if (!name || !email || !password || !address) {
@@ -17,9 +17,11 @@ const usersMethod = {
             }
             const [newUser, isCreated] = await User.findOrCreate({
                 where: {
-                    name
+                    [Op.or]:{
+                        name,email
+                    }
                 },
-                defaults: {email,password,address}
+                defaults: {name,email,password,address}
             })
 
             if (!isCreated) {
@@ -137,4 +139,4 @@ app.delete("/api/user/:id",usersMethod.delete)
 
 app.listen(3000, () => {
     console.log("Server running at http://127.0.0.1:3000")
-  })
+    })
