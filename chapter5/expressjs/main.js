@@ -1,5 +1,16 @@
 const express = require('express');
-const dbConn = require("./configs/db_connection")
+const redis = require('redis');
+const dbConn = require("./configs/db_connection");
+
+let redisConn;
+
+(async () => {
+  redisConn = redis.createClient();
+
+  redisConn.on("error", (error) => console.error(`Error : ${error}`));
+
+  await redisConn.connect();
+})();
 
 // Upload to Local
 // const upload = require("./helpers/fileUpload");
@@ -12,19 +23,38 @@ const app = express();
 
 app.use(express.json());
 
-const getProductsHandler = (req, res) => {
+const getProductsHandler = async (req, res) => {
   // const maxPrice = req.query.max_price;
   // const minPrice = req.query.min_price;
 
-  dbConn.query("select * from products").then(function (products) {
-    res.json({
+  try {
+    const productsRedis = await redisConn.get("products");
+
+    if (productsRedis) {
+
+      return res.status(200).json({
+        status: "OK",
+        message: "Success retrieving data from redis",
+        data: JSON.parse(productsRedis)
+      });
+    }
+
+    const products = await dbConn.query("select * from products");
+
+    await redisConn.set("products", JSON.stringify(products.rows));
+
+    return res.status(200).json({
       status: "OK",
-      message: "Success retrieving data",
+      message: "Success retrieving data from database",
       data: products.rows
     });
-
-    return
-  });
+  } catch (err) {
+    return res.status(500).json({
+      status: "INTERNAL_SERVER_ERROR",
+      message: JSON.stringify(err.message),
+      data: null
+    });
+  }
 
   // res.json(products.filter(product => product.price < maxPrice && product.price > minPrice));
 }
