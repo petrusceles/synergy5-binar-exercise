@@ -30,14 +30,12 @@ const getProductsHandler = async (req, res) => {
   try {
     const productsRedis = await redisConn.get("products");
 
-    if (productsRedis) {
-
+    if (productsRedis)
       return res.status(200).json({
         status: "OK",
         message: "Success retrieving data from redis",
         data: JSON.parse(productsRedis)
       });
-    }
 
     const products = await dbConn.query("select * from products");
 
