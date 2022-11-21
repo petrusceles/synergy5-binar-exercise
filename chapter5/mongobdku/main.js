@@ -164,13 +164,6 @@ const product = {
         }
     }
 }
-
-const handler = (req,res) => {
-    res.json({
-        status:"OK"
-    })
-}
-
 app.post('/api/product', product.create)
 app.get('/api/product', product.read)
 app.get('/api/product/:id', product.readById)
