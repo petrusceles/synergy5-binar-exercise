@@ -51,18 +51,6 @@ const createProduct = async ({name, price, stock}) => {
 
 const getProduct = async (query) => {
     try {
-        for (object in query) {
-            if(!acceptedParameters.includes(object)) {
-                return {
-                    status:"BAD_REQUEST",
-                    statusCode:400,
-                    message:"unaccepted query",
-                    data:{
-                        retrieved_product:null
-                    }
-                }
-            }
-        }
         const products = await productRepository.getAllProductByAny(query);
         if (!products.length) {
             return {
@@ -98,7 +86,7 @@ const getProduct = async (query) => {
 const getProductById = async ({id}) => {
     try {
         const product = await productRepository.getProductById({id});
-        // console.log(product)
+        console.log(product)
         if (!product) {
             return {
                 status:"NOT_FOUND",
@@ -113,7 +101,7 @@ const getProductById = async ({id}) => {
         return {
             status:"OK",
             statusCode:200,
-            message:`product retireved`,
+            message:`product retrieved`,
             data:{
                 retrieved_product:product
             }

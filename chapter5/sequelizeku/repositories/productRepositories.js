@@ -23,6 +23,7 @@ const getAllProductByAny = async (query) => {
 }
 
 const getProductById = async ({id}) => {
+    console.log(id)
     const product = await Product.findByPk(id);
     return product
 }

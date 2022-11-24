@@ -24,7 +24,7 @@ module.exports = {
 
     readById: async (req,res) => {
         const {id} = req.params;
-        const {status, statusCode, message, data} = await productServices.getProductById(id)
+        const {status, statusCode, message, data} = await productServices.getProductById({id})
         return res.status(statusCode).json({
             status,
             message,
