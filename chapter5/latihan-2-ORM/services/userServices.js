@@ -6,10 +6,14 @@ const userRepositories = require('../repositories/userRepositories');
 const createUser = async ({name,email,password,address}) => {
     try {
         if (!name || !email || !password || !address) {
-            return res.status(400).json({
-                message:"invalid input",
-                data:{}
-            })
+            return {
+                status:"BAD_REQUEST",
+                statusCode:400,
+                message:"all field must not be empty",
+                data: {
+                    created_user:null
+                }
+            }
         }
 
         const encryptedPassword = await bcrypt.hash(password,SALT_ROUND);
@@ -73,7 +77,7 @@ const getUser = async (query) => {
         return {
             status:"INTERNAL_SERVICE_ERROR",
             statusCode:500,
-            message:err,
+            message:error,
             data: {
                 created_user:null
             }
@@ -83,6 +87,18 @@ const getUser = async (query) => {
 
 const userLogin = async ({email,password}) => {
     try {
+        if (!email || !password) {
+            return {
+                status:"BAD_REQUEST",
+                statusCode:400,
+                message:`all field must not be empty`,
+                data: {
+                    logged_user:null,
+                    token:null
+                }
+            }
+        }
+
         const user = await userRepositories.getUserByEmail({email});
 
         if (!user) {
@@ -97,7 +113,8 @@ const userLogin = async ({email,password}) => {
             }
         }
 
-        const isPasswordMatch = await ypt.compare(password, user.password);
+        const isPasswordMatch = await bcrypt.compare(password, user.password);
+        console.log(isPasswordMatch)
 
         if (!isPasswordMatch) {
             return {
@@ -155,7 +172,7 @@ const userGetProfile = async ({reqId, email}) => {
             }
         }
 
-        const user = await userRepositories.getUserById({reqId})
+        const user = await userRepositories.getUserById({id:reqId})
         if (!user) {
             return {
                 status:"NOT_FOUND",

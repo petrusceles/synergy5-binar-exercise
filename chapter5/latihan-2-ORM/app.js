@@ -1,10 +1,8 @@
 const express = require('express');
 const app = express();
-const {Op} = require('sequelize');
-const {User} = require('./models')
-const acceptedQueries = ['name','email','address'];
-
+const routes = require('./routes');
 app.use(express.json());
+app.use('/api', routes);
 // app.post("/api/user", usersMethod.create);
 // app.get("/api/user",usersMethod.read)
 // app.get("/api/user/:id",usersMethod.readById)

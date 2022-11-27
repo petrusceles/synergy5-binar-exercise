@@ -1,8 +1,10 @@
 const jwt = require('jsonwebtoken');
 module.exports = {
-    tokenAccess: async (req,res) => {
+    tokenAccess: async (req,res,next) => {
         try {
-            const {email} = jwt.verify(req.Authorization,process.env.JWT_SECRET)
+            const bearer = req.headers.authorization;
+            const token = bearer.split(' ')[1]
+            const {email} = jwt.verify(token,process.env.JWT_SECRET)
             req.email = email;
             next();
         } catch (err) {
