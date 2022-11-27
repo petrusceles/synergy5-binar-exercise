@@ -114,7 +114,6 @@ const userLogin = async ({email,password}) => {
         }
 
         const isPasswordMatch = await bcrypt.compare(password, user.password);
-        console.log(isPasswordMatch)
 
         if (!isPasswordMatch) {
             return {

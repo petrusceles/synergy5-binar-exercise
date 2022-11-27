@@ -3,7 +3,6 @@ module.exports = {
     create: async (req,res) => {
         const {name, email, password,address} = req.body;
         const {status,statusCode,message,data} = await userServices.createUser({name,email,password,address});
-        console.log(message)
         res.status(statusCode).json({
             status,message,data
         })
