@@ -152,6 +152,44 @@ const userLoginService = async ({email,password}) => {
     }
 }
 
+const userProfileService = async ({email}) => {
+    try {
+        const user = await authRepositories.findUserByEmail({email});
+        if (!user) {
+            return {
+                status:"NOT_FOUND",
+                statusCode:404,
+                message:"user not found",
+                data: {
+                    profile_user:null
+                }
+            }
+        }
+        return {
+            status:"OK",
+            statusCode:200,
+            message:"user logged in",
+            data: {
+                profile_user:{
+                    id:user.id,
+                    name:user.name,
+                    email:user.email,
+                    role:user.role
+                }
+            }
+        }
+    } catch (err) {
+        return {
+            status:"INTERNAL_SERVER_ERROR",
+            statusCode:500,
+            message:err,
+            data: {
+                logged_user:null
+            }
+        }
+    }
+} 
+
 module.exports = {
-    userRegisterService,userLoginService
+    userRegisterService,userLoginService,userProfileService
 }

@@ -16,6 +16,14 @@ const userLogin = async (req,res) => {
     });
 }
 
+const userProfile = async (req,res) => {
+    const email = req.user.email;
+    const {status,statusCode,message,data} = await authServices.userProfileService({email});
+    return res.status(statusCode).json({
+        status,message,data
+    });
+}
+
 module.exports = {
-    userRegister,userLogin
+    userRegister,userLogin,userProfile
 }

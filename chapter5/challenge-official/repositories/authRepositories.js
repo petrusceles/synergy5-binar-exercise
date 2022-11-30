@@ -25,7 +25,6 @@ const findUserByEmail = async ({email}) => {
     return user;
 }
 
-
 module.exports = {
     findOrCreateUser,findUserByEmail
 }
