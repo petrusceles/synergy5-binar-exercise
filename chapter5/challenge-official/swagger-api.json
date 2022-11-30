@@ -1,0 +1,316 @@
+{
+    "swagger":"2.0",
+    "info": {
+      "title":"BCR API",
+      "version":"1.0.0",
+      "description": "BCR API documentation",
+      "license": {
+        "name": "MIT",
+        "url": "https://opensource.org/licenses/MIT"
+      }
+    },
+    "host": "localhost:2000",
+    "basePath": "/api",
+    "tags": [
+        {
+            "name": "Auth",
+            "description": "API for authentication"
+        },
+        {
+            "name": "Car",
+            "description": "API for managing car data"
+        }
+    ],
+    "schemes": ["http"],
+    "consumes": ["application/json"],
+    "produces": ["application/json"],
+    "paths": {
+        "/auth/register": {
+            "post": {
+                "description": "Register endpoint for user",
+                "tags": ["Auth"],
+                "parameters": [
+                    {
+                        "name": "register",
+                        "in": "body",
+                        "description": "user to register",
+                        "schema":{
+                            "$ref":"#/definitions/UserRegister"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201":{
+                        "description": "success registering user",
+                        "schema":{
+                            "type":"object",
+                            "properties": {
+                                "status":{
+                                    "type":"string"
+                                },
+                                "message":{
+                                    "type":"string"
+                                },
+                                "data":{
+                                    "$ref": "#/definitions/User"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/car": {
+            "post": {
+                "description": "add new car",
+                "tags": ["Car"],
+                "security": [{ "Bearer": [] }],
+                "parameters": [
+                    {
+                        "name": "add",
+                        "in": "body",
+                        "description": "car information",
+                        "schema": {
+                            "$ref": "#/definitions/Car"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "success add new car",
+                        "schema":{
+                            "$ref": "#/definitions/Car"
+                        }
+                    }
+                }
+            },
+            "get": {
+                "description": "read all cars",
+                "tags": ["Car"],
+                "security": [{ "Bearer": [] }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema":{
+                            "type":"array",
+                            "items": {
+                                "$ref": "#/definitions/CarResponse"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/car/{id}": {
+            "get": {
+                "description": "get car by id",
+                "tags": ["Car"],
+                "security": [{ "Bearer": [] }],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "car id",
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema":{
+                            "$ref": "#/definitions/CarResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "update car data by id",
+                "tags": ["Car"],
+                "security": [{ "Bearer": [] }],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "car id",
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema":{
+                            "$ref": "#/definitions/CarResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "delete car data by id",
+                "tags": ["Car"],
+                "security": [{ "Bearer": [] }],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "car id",
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/auth/login": {
+            "post": {
+                "description": "send credentials to login",
+                "tags": ["Auth"],
+                "parameters": [
+                    {
+                        "name": "login",
+                        "in": "body",
+                        "required": true,
+                        "description": "user credentials",
+                        "schema": {
+                            "$ref": "#/definitions/UserLogin"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema":{
+                            "type":"object",
+                            "properties": {
+                                "logged_user":{
+                                    "$ref": "#/definitions/User"
+                                },
+                                "token":{
+                                    "type":"string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/me": {
+            "get": {
+                "description": "get user profile",
+                "tags": ["Auth"],
+                "security": [{ "Bearer": [] }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema":{
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "UserRegister": {
+            "type": "object",
+            "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                },
+                "role": {
+                  "type": "string"
+                }
+            }
+        },
+        "User": {
+            "type": "object",
+            "properties": {
+                "_id":{
+                    "type": "integer",
+                    "uniqueItems": true
+                },
+                "name":{
+                    "type": "string"
+                },
+                "email":{
+                    "type": "string"
+                },
+                "role":{
+                    "type": "string"
+                }
+            }
+        },
+        "Car": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "price":{
+                    "type":"number"
+                },
+                "size_id":{
+                    "type":"integer"
+                },
+                "is_available":{
+                    "type":"boolean"
+                }
+            }
+        },
+        "CarResponse": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "price":{
+                    "type":"number"
+                },
+                "size":{
+                    "type":"object",
+                    "properties": {
+                        "name":{
+                            "type":"string"
+                        }
+                    }
+                },
+                "picture_url": {
+                    "type":"string"
+                },
+                "is_available":{
+                    "type":"boolean"
+                }
+            }
+        },
+        "UserLogin": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password":{
+                    "type":"string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+      "Bearer": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header",
+        "description": "Enter your bearer token in the format **Bearer &lt;token>**"
+      }
+    }
+}
