@@ -1,6 +1,9 @@
 'use strict';
 
 /** @type {import('sequelize-cli').Migration} */
+require('dotenv').config();
+const bcrypt = require('bcrypt');
+
 module.exports = {
   async up (queryInterface, Sequelize) {
     /**
@@ -12,6 +15,15 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
+   const encryptedPassword = await bcrypt.hash(process.env.SUPER_ADMIN_PASSWORD, parseInt(process.env.SALT_ROUND))
+   await queryInterface.bulkInsert('Users', [{
+    name:'Super Admin',
+    email:'superadmin@mail.com',
+    password:encryptedPassword,
+    role_id: 1,
+    createdAt:new Date(),
+    updatedAt:new Date()
+   }])
   },
 
   async down (queryInterface, Sequelize) {
@@ -21,5 +33,6 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
+    await queryInterface.bulkDelete('Users',null,{})
   }
 };

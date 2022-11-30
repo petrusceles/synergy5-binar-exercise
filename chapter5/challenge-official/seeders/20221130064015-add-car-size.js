@@ -12,6 +12,19 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
+   await queryInterface.bulkInsert('CarSizes', [{
+    name:'small',
+    createdAt:new Date(),
+    updatedAt:new Date()
+   },{
+    name:'medium',
+    createdAt:new Date(),
+    updatedAt:new Date()
+   },{
+    name:'large',
+    createdAt:new Date(),
+    updatedAt:new Date()
+   }])
   },
 
   async down (queryInterface, Sequelize) {
@@ -21,5 +34,6 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
+    await queryInterface.bulkDelete('CarSizes', null,{});
   }
 };
