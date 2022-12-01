@@ -15,19 +15,16 @@ module.exports = {
       price: {
         type: Sequelize.BIGINT
       },
-      size_id: {
+      size: {
+        type: Sequelize.STRING
+      },
+      created_id: {
         type: Sequelize.INTEGER
       },
-      is_available: {
-        type: Sequelize.BOOLEAN
-      },
-      created_by: {
+      updated_id: {
         type: Sequelize.INTEGER
       },
-      updated_by: {
-        type: Sequelize.INTEGER
-      },
-      deleted_by: {
+      deleted_id: {
         type: Sequelize.INTEGER
       },
       createdAt: {
@@ -36,6 +33,9 @@ module.exports = {
       },
       updatedAt: {
         allowNull: false,
+        type: Sequelize.DATE
+      },
+      deletedAt: {
         type: Sequelize.DATE
       }
     });

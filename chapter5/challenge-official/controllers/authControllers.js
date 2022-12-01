@@ -1,8 +1,7 @@
 const authServices = require('../services/authServices');
-
 const userRegister = async (req,res) => {
-    const {name,email,password,role} = req.body;
-    const {status,statusCode,message,data} = await authServices.userRegisterService({name,email,password,role});
+    const {name,email,password,role_id} = req.body;
+    const {status,statusCode,message,data} = await authServices.userRegisterService({name,email,password,role_id});
     return res.status(statusCode).json({
         status,message,data
     });
@@ -24,6 +23,14 @@ const userProfile = async (req,res) => {
     });
 }
 
+const userAdminRegister = async (req,res) => {
+    const {name,email,password,role_id} = req.body;
+    const {status,statusCode,message,data} = await authServices.userAdminRegisterService({name,email,password,role_id});
+    return res.status(statusCode).json({
+        status,message,data
+    });
+}
+
 module.exports = {
-    userRegister,userLogin,userProfile
+    userRegister,userLogin,userProfile,userAdminRegister
 }

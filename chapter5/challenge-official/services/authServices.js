@@ -2,9 +2,10 @@ const bcrypt = require('bcrypt')
 const authRepositories = require('../repositories/authRepositories');
 const authValidator = require('../lib/validator');
 const jwt = require('jsonwebtoken');
-const userRegisterService = async ({name,email,password,role}) => {
+const { ROLES } = require('../lib/const');
+const userRegisterService = async ({name,email,password,role_id}) => {
     try {
-        if (!name || !email || !password || !role) {
+        if (!name || !email || !password || !role_id) {
             return {
                 status:"BAD_REQUEST",
                 statusCode:400,
@@ -15,22 +16,33 @@ const userRegisterService = async ({name,email,password,role}) => {
             }
         }
 
-        const isValid = authValidator.userRegisterCheck({name,email,password,role})
+        if (role_id !== ROLES.MEMBER) {
+            return {
+                status:"BAD_REQUEST",
+                statusCode:400,
+                message:"only member role user can be registered this way",
+                data: {
+                    registered_user:null
+                }
+            }
+        }
+
+        const isValid = authValidator.userRegisterCheck({name,email,password,role_id})
 
         if (isValid.length) {
             return {
                 status:"BAD_REQUEST",
                 statusCode:400,
-                message:"err",
+                message:isValid,
                 data: {
                     registered_user:null
                 }
             }
         }
     
-        const encryptedPassword = await bcrypt.hash(password, process.env.SALT_ROUND);
+        const encryptedPassword = await bcrypt.hash(password, parseInt(process.env.SALT_ROUND));
     
-        const {createdUser, isCreated} = await authRepositories.findOrCreateUser({name,email,password:encryptedPassword,role})
+        const {createdUser, isCreated} = await authRepositories.findOrCreateUser({name,email,password:encryptedPassword,role_id})
     
         if (!isCreated) {
             return {
@@ -51,11 +63,12 @@ const userRegisterService = async ({name,email,password,role}) => {
                 registered_user:{
                     name:createdUser.name,
                     email:createdUser.email,
-                    role:createdUser.role
+                    role_id:createdUser.role_id
                 }
             }
         }
     } catch (err) {
+        console.log(err)
         return {
             status:"INTERNAL_SERVER_ERROR",
             statusCode:500,
@@ -119,7 +132,7 @@ const userLoginService = async ({email,password}) => {
         }
 
         const userPayload = {
-            email,role:userExist.role
+            email,role_id:userExist.role_id,id:userExist.id
         }
 
         const token = jwt.sign(userPayload, process.env.JWT_SECRET, {
@@ -168,7 +181,7 @@ const userProfileService = async ({email}) => {
         return {
             status:"OK",
             statusCode:200,
-            message:"user logged in",
+            message:"user profile",
             data: {
                 profile_user:{
                     id:user.id,
@@ -188,8 +201,85 @@ const userProfileService = async ({email}) => {
             }
         }
     }
-} 
+}
+
+const userAdminRegisterService = async ({name,email,password,role_id}) => {
+    try {
+        if (!name || !email || !password || !role_id) {
+            return {
+                status:"BAD_REQUEST",
+                statusCode:400,
+                message:"all fields (name, email, password, role_id) must not be empty",
+                data: {
+                    registered_user:null
+                }
+            }
+        }
+
+        if (role_id !== ROLES.ADMIN) {
+            return {
+                status:"BAD_REQUEST",
+                statusCode:400,
+                message:"only admin role user can be registered this way",
+                data: {
+                    registered_user:null
+                }
+            }
+        }
+
+        const isValid = authValidator.userRegisterCheck({name,email,password,role_id})
+
+        if (isValid.length) {
+            return {
+                status:"BAD_REQUEST",
+                statusCode:400,
+                message:isValid,
+                data: {
+                    registered_user:null
+                }
+            }
+        }
+    
+        const encryptedPassword = await bcrypt.hash(password, parseInt(process.env.SALT_ROUND));
+    
+        const {createdUser, isCreated} = await authRepositories.findOrCreateUser({name,email,password:encryptedPassword,role_id})
+    
+        if (!isCreated) {
+            return {
+                status:"BAD_REQUEST",
+                statusCode:400,
+                message:"user is already exist",
+                data: {
+                    registered_user:null
+                }
+            }
+        }
+    
+        return {
+            status:"OK",
+            statusCode:201,
+            message:"user registered",
+            data: {
+                registered_user:{
+                    name:createdUser.name,
+                    email:createdUser.email,
+                    role_id:createdUser.role_id
+                }
+            }
+        }
+    } catch (err) {
+        console.log(err)
+        return {
+            status:"INTERNAL_SERVER_ERROR",
+            statusCode:500,
+            message:err,
+            data: {
+                registered_user:null
+            }
+        }
+    }
+}
 
 module.exports = {
-    userRegisterService,userLoginService,userProfileService
+    userRegisterService,userLoginService,userProfileService,userAdminRegisterService
 }

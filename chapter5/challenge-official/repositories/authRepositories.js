@@ -1,7 +1,7 @@
-const {User} = require('../models');
+const {User,Role} = require('../models');
 const {Op} = require('sequelize');
 
-const findOrCreateUser = async ({name,email,password,role}) => {
+const findOrCreateUser = async ({name,email,password,role_id}) => {
     const [createdUser, isCreated] = await User.findOrCreate({
         where:{
             [Op.or]:{
@@ -9,7 +9,7 @@ const findOrCreateUser = async ({name,email,password,role}) => {
             }
         },
         defaults:{
-            name,email,password,role
+            name,email,password,role_id
         }
     })
 
@@ -20,7 +20,12 @@ const findUserByEmail = async ({email}) => {
     const user = await User.findOne({
         where:{
             email
-        }
+        },
+        include: [{
+            model:Role,
+            as:"role",
+            attributes:['id','name']
+        }]
     })
     return user;
 }

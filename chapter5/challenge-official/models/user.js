@@ -11,10 +11,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      User.hasMany(models.Car, {as:'created_by'})
-      User.hasMany(models.Car, {as:'updated_by'})
-      User.hasMany(models.Car, { as:'deleted_by'})
-      User.belongsTo(models.Role, {foreignKey:'role_id', as:"role"})
+      User.hasMany(models.Car, {foreignKey:'created_id', as:'created_by'})
+      User.hasMany(models.Car, {foreignKey:'updated_id', as:'updated_by'})
+      User.hasMany(models.Car, {foreignKey:'deleted_id', as:'deleted_by'})
+      User.belongsTo(models.Role,{foreignKey:"role_id", as:"role"})
     }
   }
   User.init({

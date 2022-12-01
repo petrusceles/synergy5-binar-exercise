@@ -43,18 +43,7 @@
                     "201":{
                         "description": "success registering user",
                         "schema":{
-                            "type":"object",
-                            "properties": {
-                                "status":{
-                                    "type":"string"
-                                },
-                                "message":{
-                                    "type":"string"
-                                },
-                                "data":{
-                                    "$ref": "#/definitions/User"
-                                }
-                            }
+                            "$ref": "#/definitions/User"
                         }
                     }
                 }
@@ -207,6 +196,32 @@
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema":{
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/admin/register": {
+            "post": {
+                "description": "",
+                "tags": ["Auth"],
+                "security": [{ "Bearer": [] }],
+                "parameters": [
+                    {
+                        "name": "admin register",
+                        "in": "body",
+                        "required": true,
+                        "description": "register new admin",
+                        "schema": {
+                            "$ref": "#/definitions/UserRegister"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201":{
+                        "description": "success registering admin user",
                         "schema":{
                             "$ref": "#/definitions/User"
                         }
