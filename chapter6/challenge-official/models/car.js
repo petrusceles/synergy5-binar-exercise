@@ -11,9 +11,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Car.belongsTo(models.User, {foreignKey:'created_id', as:'created_by'});
-      Car.belongsTo(models.User, {foreignKey:'updated_id', as:'updated_by'});
-      Car.belongsTo(models.User, {foreignKey:'deleted_id', as:'deleted_by'});
+      Car.belongsTo(models.User, {foreignKey:'created_id', as:'createdBy'});
+      Car.belongsTo(models.User, {foreignKey:'updated_id', as:'updatedBy'});
+      Car.belongsTo(models.User, {foreignKey:'deleted_id', as:'deletedBy'});
     }
   }
   Car.init({

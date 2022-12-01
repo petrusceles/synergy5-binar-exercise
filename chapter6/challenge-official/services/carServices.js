@@ -11,9 +11,9 @@ function uploadToCloudinary(image) {
         })
     });
 }
-const createCarService = async ({name,price,size,user,file}) => {
+const createCarService = async ({name,price,size,user,picture}) => {
     try {
-        if (!name || !price || !size || !file) {
+        if (!name || !price || !size || !picture) {
             return {
                 status:"BAD_REQUEST",
                 statusCode:400,
@@ -36,11 +36,12 @@ const createCarService = async ({name,price,size,user,file}) => {
             }
         }
 
-        const created_id = user.id
+        const query = {
+            name
+        }
+        const isCarExist= await CarRepositories.readAllCar({query})
 
-        const {newCar, isCreated} = await CarRepositories.findOrCreateCar({name,price,size,created_id})
-
-        if (!isCreated) {
+        if (isCarExist.length) {
             return {
                 status:"BAD_REQUEST",
                 statusCode:400,
@@ -50,8 +51,11 @@ const createCarService = async ({name,price,size,user,file}) => {
                 }
             }
         }
+        const created_id = user.id
 
-        const fileResponse = await uploadToCloudinary(file)
+        const fileResponse = await uploadToCloudinary(picture)
+
+        const newCar = await CarRepositories.createCar({name,price,size,created_id,picture_url:fileResponse.url})
         
 
         return {
@@ -75,9 +79,9 @@ const createCarService = async ({name,price,size,user,file}) => {
     }
 }
 
-const updateCarService = async ({id,name,price,size,user}) => {
+const updateCarService = async ({id,name,price,size,user,picture}) => {
     try {
-        if (!name && !price && !size) {
+        if (!name && !price && !size & !picture) {
             return {
                 status:"BAD_REQUEST",
                 statusCode:400,
@@ -87,9 +91,14 @@ const updateCarService = async ({id,name,price,size,user}) => {
                 }
             }
         }
+        let picture_url = undefined;
+        if (picture) {
+            const fileResponse = await uploadToCloudinary(picture);
+            picture_url = fileResponse.url
+        }
 
         const updated_id = user.id;
-        const updatedCar = await CarRepositories.updateCarById({id,name,price,size,updated_id});
+        const updatedCar = await CarRepositories.updateCarById({id,name,price,size,updated_id,picture_url});
 
         return {
             status:"OK",
@@ -183,7 +192,7 @@ const deleteCarService = async ({id,user}) => {
     try {
         const deleted_id = user.id;
         const deletedCar = await CarRepositories.deleteCarById({id,deleted_id})
-        if (!deletedCar) {
+        if (deletedCar[0] == 0) {
             return {
                 status:"NOT_FOUND",
                 statusCode:404,
@@ -207,7 +216,7 @@ const deleteCarService = async ({id,user}) => {
             statusCode:500,
             message:err,
             data:{
-                created_car:null
+                deleted_car:null
             }
         }
     }

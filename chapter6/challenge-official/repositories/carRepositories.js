@@ -3,17 +3,17 @@ const CAR_ATTRIBUTES = {
     include:[
         {
             model:User,
-            as:'created_by',
+            as:'createdBy',
             attributes:['name','email']
         },
         {
             model:User,
-            as:'updated_by',
+            as:'updatedBy',
             attributes:['name','email']
         },
         {
             model:User,
-            as:'deleted_by',
+            as:'deletedBy',
             attributes:['name','email']
         }
     ],
@@ -22,24 +22,18 @@ const CAR_ATTRIBUTES = {
     }
 }
 class CarRepositories {
-    static async findOrCreateCar({name,price,size,created_id}) {
-        const [newCar,isCreated] = await Car.findOrCreate({
-            where: {
-                name
-            },
-            defaults: {
-                name,price,size,created_id
-            }
+    static async createCar({name,price,size,created_id,picture_url}) {
+        const newCar= await Car.create({
+                name,price,size,created_id,picture_url
         })
 
-        return {newCar,isCreated}
+        return newCar
     }
 
-    static async updateCarById(data) {
+    static async updateCarById({id,name,price,size,updated_id,picture_url}) {
         // console.log(id,name,price,updated_id)
-        const {id,name,price,size,updated_id} = data
         const updatedCar = await Car.update({
-            name,price,size,updated_id
+            name,price,size,updated_id,picture_url
         }, {
             where:{
                 id,

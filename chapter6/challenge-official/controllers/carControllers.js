@@ -2,9 +2,9 @@ const carServices = require('../services/carServices');
 
 const createCar = async (req,res) => {
     const {name,price,size} = req.body;
-    const file = req.fileEncoded
+    const picture = req.fileEncoded
     const user = req.user;
-    const {status,statusCode,message,data} = await carServices.createCarService({name,price,size,user,file})
+    const {status,statusCode,message,data} = await carServices.createCarService({name,price,size,user,picture})
     return res.status(statusCode).json({
         status,message,data
     });
@@ -13,8 +13,9 @@ const createCar = async (req,res) => {
 const updateCar = async (req,res) => {
     const {id} = req.params;
     const {name,price,size} = req.body;
+    const picture = req.fileEncoded
     const user = req.user;
-    const {status,statusCode,message,data} = await carServices.updateCarService({id,name,price,size,user});
+    const {status,statusCode,message,data} = await carServices.updateCarService({id,name,price,size,user,picture});
     return res.status(statusCode).json({
         status,message,data
     });

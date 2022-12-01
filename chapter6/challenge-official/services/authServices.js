@@ -41,10 +41,9 @@ const userRegisterService = async ({name,email,password,role_id}) => {
         }
     
         const encryptedPassword = await bcrypt.hash(password, parseInt(process.env.SALT_ROUND));
-    
-        const {createdUser, isCreated} = await authRepositories.findOrCreateUser({name,email,password:encryptedPassword,role_id})
-    
-        if (!isCreated) {
+        // console.log("ASAS")
+        const isUserExist = await authRepositories.findUserByNameOrEmail({name,email})
+        if (isUserExist) {
             return {
                 status:"BAD_REQUEST",
                 statusCode:400,
@@ -55,6 +54,10 @@ const userRegisterService = async ({name,email,password,role_id}) => {
             }
         }
     
+        const createdUser = await authRepositories.createUser({name,email,password:encryptedPassword,role_id})
+        
+        console.log(createdUser)
+
         return {
             status:"OK",
             statusCode:201,
@@ -63,7 +66,7 @@ const userRegisterService = async ({name,email,password,role_id}) => {
                 registered_user:{
                     name:createdUser.name,
                     email:createdUser.email,
-                    role_id:createdUser.role_id
+                    role:createdUser.role
                 }
             }
         }

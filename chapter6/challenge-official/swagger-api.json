@@ -43,7 +43,7 @@
                     "201":{
                         "description": "success registering user",
                         "schema":{
-                            "$ref": "#/definitions/User"
+                            "$ref": "#/definitions/UserRegisterResponse"
                         }
                     }
                 }
@@ -54,21 +54,42 @@
                 "description": "add new car",
                 "tags": ["Car"],
                 "security": [{ "Bearer": [] }],
+                "consumes":["multipart/form-data"],
                 "parameters": [
                     {
-                        "name": "add",
-                        "in": "body",
-                        "description": "car information",
-                        "schema": {
-                            "$ref": "#/definitions/Car"
-                        }
+                        "name": "name",
+                        "in": "formData",
+                        "description": "car name",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "price",
+                        "in": "formData",
+                        "description": "car price",
+                        "required": true,
+                        "type": "number"
+                    },
+                    {
+                        "name": "size",
+                        "in": "formData",
+                        "description": "car size",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "picture",
+                        "in": "formData",
+                        "description": "car picture",
+                        "required": true,
+                        "type": "file"
                     }
                 ],
                 "responses": {
                     "201": {
                         "description": "success add new car",
                         "schema":{
-                            "$ref": "#/definitions/Car"
+                            "$ref": "#/definitions/CarCreateResponse"
                         }
                     }
                 }
@@ -117,6 +138,7 @@
                 "description": "update car data by id",
                 "tags": ["Car"],
                 "security": [{ "Bearer": [] }],
+                "consumes":["multipart/form-data"],
                 "parameters": [
                     {
                         "name": "id",
@@ -124,13 +146,40 @@
                         "required": true,
                         "description": "car id",
                         "type": "integer"
+                    },
+                    {
+                        "name": "name",
+                        "in": "formData",
+                        "description": "car name",
+                        "type": "string"
+                    },
+                    {
+                        "name": "price",
+                        "in": "formData",
+                        "description": "car price",
+                        "type": "number"
+                    },
+                    {
+                        "name": "size",
+                        "in": "formData",
+                        "description": "car size",
+                        "type": "string"
+                    },
+                    {
+                        "name": "picture",
+                        "in": "formData",
+                        "description": "car picture",
+                        "type": "file"
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema":{
-                            "$ref": "#/definitions/CarResponse"
+                            "type":"array",
+                            "items": {
+                                "type":"integer"
+                            }
                         }
                     }
                 }
@@ -150,7 +199,13 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema":{
+                            "type":"array",
+                            "items": {
+                                "type":"integer"
+                            }
+                        }
                     }
                 }
             }
@@ -223,7 +278,7 @@
                     "201":{
                         "description": "success registering admin user",
                         "schema":{
-                            "$ref": "#/definitions/User"
+                            "$ref": "#/definitions/UserRegisterResponse"
                         }
                     }
                 }
@@ -243,8 +298,8 @@
                 "password": {
                   "type": "string"
                 },
-                "role": {
-                  "type": "string"
+                "role_id": {
+                  "type": "integer"
                 }
             }
         },
@@ -262,7 +317,25 @@
                     "type": "string"
                 },
                 "role":{
+                    "$ref": "#/definitions/Role"
+                }
+            }
+        },
+        "UserRegisterResponse": {
+            "type": "object",
+            "properties": {
+                "_id":{
+                    "type": "integer",
+                    "uniqueItems": true
+                },
+                "name":{
                     "type": "string"
+                },
+                "email":{
+                    "type": "string"
+                },
+                "role_id":{
+                    "type": "integer"
                 }
             }
         },
@@ -275,15 +348,15 @@
                 "price":{
                     "type":"number"
                 },
-                "size_id":{
-                    "type":"integer"
+                "size":{
+                    "type":"string"
                 },
-                "is_available":{
-                    "type":"boolean"
+                "picture":{
+                    "type":"string"
                 }
             }
         },
-        "CarResponse": {
+        "CarCreateResponse": {
             "type": "object",
             "properties": {
                 "name": {
@@ -293,18 +366,63 @@
                     "type":"number"
                 },
                 "size":{
-                    "type":"object",
-                    "properties": {
-                        "name":{
-                            "type":"string"
-                        }
-                    }
+                    "type":"string"
+                },
+                "created_id":{
+                    "type":"integer"
+                },
+                "updated_id":{
+                    "type":"integer"
+                },
+                "deleted_id":{
+                    "type":"integer"
+                },
+                "createdAt":{
+                    "type":"string"
+                },
+                "updatedAt":{
+                    "type":"string"
+                },
+                "deletedAt":{
+                    "type":"string"
+                }
+            }
+        },
+        "CarResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price":{
+                    "type":"number"
+                },
+                "size":{
+                    "type":"string"
                 },
                 "picture_url": {
                     "type":"string"
                 },
-                "is_available":{
-                    "type":"boolean"
+                "createdBy":{
+                    "$ref": "#/definitions/UserLight"
+                },
+                "updatedBy":{
+                    "$ref": "#/definitions/UserLight"
+                },
+                "deletedBy":{
+                    "$ref": "#/definitions/UserLight"
+                },
+                "createdAt":{
+                    "type":"string"
+                },
+                "updatedAt":{
+                    "type":"string"
+                },
+                "deletedAt":{
+                    "type":"string"
                 }
             }
         },
@@ -316,6 +434,28 @@
                 },
                 "password":{
                     "type":"string"
+                }
+            }
+        },
+        "Role":{
+            "type":"object",
+            "properties": {
+                "id":{
+                    "type":"integer"
+                },
+                "name":{
+                    "type":"string"
+                }
+            }
+        },
+        "UserLight": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
                 }
             }
         }
