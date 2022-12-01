@@ -18,6 +18,9 @@ module.exports = {
       size: {
         type: Sequelize.STRING
       },
+      picture_url: {
+        type: Sequelize.STRING
+      },
       created_id: {
         type: Sequelize.INTEGER
       },

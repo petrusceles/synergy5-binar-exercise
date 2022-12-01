@@ -1,14 +1,23 @@
 const { ROLES } = require('../lib/const');
 const CarRepositories = require('../repositories/carRepositories');
 const acceptedSize = ['small','medium','large']
+const cloudinary = require('../config/cloudinary')
 
-const createCarService = async ({name,price,size,user}) => {
+function uploadToCloudinary(image) {
+    return new Promise((resolve, reject) => {
+        cloudinary.uploader.upload(image, (err, url) => {
+        if (err) return reject(err);
+        return resolve(url);
+        })
+    });
+}
+const createCarService = async ({name,price,size,user,file}) => {
     try {
-        if (!name || !price || !size) {
+        if (!name || !price || !size || !file) {
             return {
                 status:"BAD_REQUEST",
                 statusCode:400,
-                message:"all fields (name, price, size) must not be empty",
+                message:"all fields (name, price, size, picture) must not be empty",
                 data: {
                     created_car:null
                 }
@@ -41,6 +50,9 @@ const createCarService = async ({name,price,size,user}) => {
                 }
             }
         }
+
+        const fileResponse = await uploadToCloudinary(file)
+        
 
         return {
             status:"CREATED",
