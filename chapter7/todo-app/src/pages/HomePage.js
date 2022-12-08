@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import './App.css';
-import Header from "./components/Header"
-import Student from "./components/Student"
+import './home-page.css';
+import Header from "../components/Header"
+import Student from "../components/Student"
+import { Link } from 'react-router-dom';
 
 const students = [
   {
@@ -18,7 +19,7 @@ const students = [
   },
 ]
 
-function App() {
+function HomePage() {
   const [studentsState, setStudentsState] = useState(students);
   const [count, setCount] = useState(0);
   const [name, setName] = useState("");
@@ -68,6 +69,11 @@ function App() {
   return (
     <div>
       <Header />
+      <h3>Home Page</h3>
+      <a href="/about">Pindah ke halaman about pake href</a>
+      <br />
+      <Link to="/about">Pindah ke halaman about pake link</Link>
+
       <h1 className="text-red">Fitur Student App</h1>
       {
         studentsState.map(student => <Student student={student} />)
@@ -87,4 +93,4 @@ function App() {
   );
 }
 
-export default App;
+export default HomePage;
