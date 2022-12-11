@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './home-page.css';
 import Header from "../components/Header"
 import Student from "../components/Student"
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom'
 
 const students = [
   {
@@ -20,10 +22,39 @@ const students = [
 ]
 
 function HomePage() {
+  const navigate = useNavigate();
+
   const [studentsState, setStudentsState] = useState(students);
   const [count, setCount] = useState(0);
   const [name, setName] = useState("");
   const [age, setAge] = useState(0);
+  const [loggedInUser, setLoggedInUser] = useState();
+
+  useEffect(() => {
+    const checkIsLoggedIn = async () => {
+      try {
+        const jwtToken = localStorage.getItem("user_token");
+
+        const validateTokenResponse = await axios.get("http://localhost:8000/api/auth/me", {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`
+          }
+        })
+
+        if (validateTokenResponse.status !== 200) {
+          navigate("/login")
+        } else {
+          console.log(validateTokenResponse.data.data.user);
+          setLoggedInUser(validateTokenResponse.data.data.user);
+        }
+      } catch (err) {
+        console.log(err)
+        navigate("/login")
+      }
+    }
+
+    checkIsLoggedIn();
+  }, [])
 
   const incrementCounter = () => {
     setCount(count + 1);
@@ -70,6 +101,7 @@ function HomePage() {
     <div>
       <Header />
       <h3>Home Page</h3>
+      <h2>Selamat datang, {loggedInUser ? loggedInUser.username : "Loading..."}</h2>
       <a href="/about">Pindah ke halaman about pake href</a>
       <br />
       <Link to="/about">Pindah ke halaman about pake link</Link>
