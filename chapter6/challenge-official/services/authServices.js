@@ -28,7 +28,6 @@ const userRegisterService = async ({name,email,password,role_id}) => {
         }
 
         const isValid = authValidator.userRegisterCheck({name,email,password,role_id})
-
         if (isValid.length) {
             return {
                 status:"BAD_REQUEST",
@@ -41,7 +40,6 @@ const userRegisterService = async ({name,email,password,role_id}) => {
         }
     
         const encryptedPassword = await bcrypt.hash(password, parseInt(process.env.SALT_ROUND));
-        // console.log("ASAS")
         const isUserExist = await authRepositories.findUserByNameOrEmail({name,email})
         if (isUserExist) {
             return {
@@ -101,7 +99,7 @@ const userLoginService = async ({email,password}) => {
             return {
                 status:"BAD_REQUEST",
                 statusCode:400,
-                message:isValid,
+                message:"invalid email or password",
                 data: {
                     logged_user:null
                 }

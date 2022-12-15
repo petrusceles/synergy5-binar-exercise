@@ -6,7 +6,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily:{
-        'general':['Roboto','sans-serif']
+        'sans':['Fira Sans','sans-serif']
       }
     },
   },

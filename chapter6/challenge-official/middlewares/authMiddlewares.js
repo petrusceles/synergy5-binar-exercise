@@ -3,6 +3,8 @@ const {ROLES} = require('../lib/const');
 const checkToken = (req,res,next) => {
     try {
         const bearer = req.headers.authorization;
+        console.log(bearer)
+
         if (!bearer) {
             return res.status(401).json({
                 status:"UNAUTHORIZED",
