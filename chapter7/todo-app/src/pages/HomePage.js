@@ -42,19 +42,19 @@ function HomePage() {
         })
 
         if (validateTokenResponse.status !== 200) {
-          navigate("/login")
+          navigate("/login");
         } else {
           console.log(validateTokenResponse.data.data.user);
           setLoggedInUser(validateTokenResponse.data.data.user);
         }
       } catch (err) {
-        console.log(err)
-        navigate("/login")
+        console.log(err);
+        navigate("/login");
       }
     }
 
     checkIsLoggedIn();
-  }, [])
+  }, [loggedInUser])
 
   const incrementCounter = () => {
     setCount(count + 1);
@@ -97,11 +97,20 @@ function HomePage() {
     }
   }
 
+  const logoutEventHandler = (e) => {
+    e.preventDefault();
+
+    localStorage.removeItem("user_token")
+    setLoggedInUser(null);
+  }
+
   return (
     <div>
       <Header />
       <h3>Home Page</h3>
       <h2>Selamat datang, {loggedInUser ? loggedInUser.username : "Loading..."}</h2>
+      <button onClick={(e) => logoutEventHandler(e)}>Logout</button>
+
       <a href="/about">Pindah ke halaman about pake href</a>
       <br />
       <Link to="/about">Pindah ke halaman about pake link</Link>
