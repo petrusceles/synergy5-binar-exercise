@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import axios from "axios";
 import { BACKEND } from "../lib/const";
 import { addUser } from "../slices/userSlice";
-export default function LandingPage() {
+export default function RentPage() {
   const dispatch = useDispatch();
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [user, setUser] = useState({});
@@ -68,7 +68,7 @@ export default function LandingPage() {
       </div>
       <div className="pt-40 bg-blue-100">
         <div className="container mx-auto">
-          <Hero isRentPage={false} />
+          <Hero isRentPage={true} />
         </div>
       </div>
     </>
