@@ -26,17 +26,6 @@ export default function Login() {
                 email,password
             }
             const response = await axios.post('http://localhost:2000/api/auth/login',requestBody)
-            // console.log(response.data.message);
-            // console.log(notificationRef.current.classList.contains('hidden'))
-            console.log(response)
-            // if (response.status !== 200) {
-            //     setNotification(response.data.message)
-            //     notificationRef.current.classList.remove('hidden')
-            //     navigate('/login')
-            // } else {
-            //     localStorage.setItem("token", response.data.data.token)
-            //     navigate('/admin')
-            // }
             localStorage.setItem("token", response.data.data.token)
             navigate('/admin')
         } catch (err) {

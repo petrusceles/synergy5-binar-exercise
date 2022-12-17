@@ -1,0 +1,471 @@
+{
+    "swagger":"2.0",
+    "info": {
+      "title":"BCR API",
+      "version":"1.0.0",
+      "description": "BCR API documentation",
+      "license": {
+        "name": "MIT",
+        "url": "https://opensource.org/licenses/MIT"
+      }
+    },
+    "host": "localhost:2000",
+    "basePath": "/api",
+    "tags": [
+        {
+            "name": "Auth",
+            "description": "API for authentication"
+        },
+        {
+            "name": "Car",
+            "description": "API for managing car data"
+        }
+    ],
+    "schemes": ["http"],
+    "consumes": ["application/json"],
+    "produces": ["application/json"],
+    "paths": {
+        "/auth/register": {
+            "post": {
+                "description": "Register endpoint for user",
+                "tags": ["Auth"],
+                "parameters": [
+                    {
+                        "name": "register",
+                        "in": "body",
+                        "description": "user to register",
+                        "schema":{
+                            "$ref":"#/definitions/UserRegister"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201":{
+                        "description": "success registering user",
+                        "schema":{
+                            "$ref": "#/definitions/UserRegisterResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/car": {
+            "post": {
+                "description": "add new car",
+                "tags": ["Car"],
+                "security": [{ "Bearer": [] }],
+                "consumes":["multipart/form-data"],
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "formData",
+                        "description": "car name",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "price",
+                        "in": "formData",
+                        "description": "car price",
+                        "required": true,
+                        "type": "number"
+                    },
+                    {
+                        "name": "size",
+                        "in": "formData",
+                        "description": "car size",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "picture",
+                        "in": "formData",
+                        "description": "car picture",
+                        "required": true,
+                        "type": "file"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "success add new car",
+                        "schema":{
+                            "$ref": "#/definitions/CarCreateResponse"
+                        }
+                    }
+                }
+            },
+            "get": {
+                "description": "read all cars",
+                "tags": ["Car"],
+                "security": [{ "Bearer": [] }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema":{
+                            "type":"array",
+                            "items": {
+                                "$ref": "#/definitions/CarResponse"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/car/{id}": {
+            "get": {
+                "description": "get car by id",
+                "tags": ["Car"],
+                "security": [{ "Bearer": [] }],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "car id",
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema":{
+                            "$ref": "#/definitions/CarResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "update car data by id",
+                "tags": ["Car"],
+                "security": [{ "Bearer": [] }],
+                "consumes":["multipart/form-data"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "car id",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "name",
+                        "in": "formData",
+                        "description": "car name",
+                        "type": "string"
+                    },
+                    {
+                        "name": "price",
+                        "in": "formData",
+                        "description": "car price",
+                        "type": "number"
+                    },
+                    {
+                        "name": "size",
+                        "in": "formData",
+                        "description": "car size",
+                        "type": "string"
+                    },
+                    {
+                        "name": "picture",
+                        "in": "formData",
+                        "description": "car picture",
+                        "type": "file"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema":{
+                            "type":"array",
+                            "items": {
+                                "type":"integer"
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "delete car data by id",
+                "tags": ["Car"],
+                "security": [{ "Bearer": [] }],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "car id",
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema":{
+                            "type":"array",
+                            "items": {
+                                "type":"integer"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/login": {
+            "post": {
+                "description": "send credentials to login",
+                "tags": ["Auth"],
+                "parameters": [
+                    {
+                        "name": "login",
+                        "in": "body",
+                        "required": true,
+                        "description": "user credentials",
+                        "schema": {
+                            "$ref": "#/definitions/UserLogin"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema":{
+                            "type":"object",
+                            "properties": {
+                                "logged_user":{
+                                    "$ref": "#/definitions/User"
+                                },
+                                "token":{
+                                    "type":"string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/me": {
+            "get": {
+                "description": "get user profile",
+                "tags": ["Auth"],
+                "security": [{ "Bearer": [] }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema":{
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/admin/register": {
+            "post": {
+                "description": "",
+                "tags": ["Auth"],
+                "security": [{ "Bearer": [] }],
+                "parameters": [
+                    {
+                        "name": "admin register",
+                        "in": "body",
+                        "required": true,
+                        "description": "register new admin",
+                        "schema": {
+                            "$ref": "#/definitions/UserRegister"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201":{
+                        "description": "success registering admin user",
+                        "schema":{
+                            "$ref": "#/definitions/UserRegisterResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "UserRegister": {
+            "type": "object",
+            "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                },
+                "role_id": {
+                  "type": "integer"
+                }
+            }
+        },
+        "User": {
+            "type": "object",
+            "properties": {
+                "_id":{
+                    "type": "integer",
+                    "uniqueItems": true
+                },
+                "name":{
+                    "type": "string"
+                },
+                "email":{
+                    "type": "string"
+                },
+                "role":{
+                    "$ref": "#/definitions/Role"
+                }
+            }
+        },
+        "UserRegisterResponse": {
+            "type": "object",
+            "properties": {
+                "_id":{
+                    "type": "integer",
+                    "uniqueItems": true
+                },
+                "name":{
+                    "type": "string"
+                },
+                "email":{
+                    "type": "string"
+                },
+                "role_id":{
+                    "type": "integer"
+                }
+            }
+        },
+        "Car": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "price":{
+                    "type":"number"
+                },
+                "size":{
+                    "type":"string"
+                },
+                "picture":{
+                    "type":"string"
+                }
+            }
+        },
+        "CarCreateResponse": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "price":{
+                    "type":"number"
+                },
+                "size":{
+                    "type":"string"
+                },
+                "created_id":{
+                    "type":"integer"
+                },
+                "updated_id":{
+                    "type":"integer"
+                },
+                "deleted_id":{
+                    "type":"integer"
+                },
+                "createdAt":{
+                    "type":"string"
+                },
+                "updatedAt":{
+                    "type":"string"
+                },
+                "deletedAt":{
+                    "type":"string"
+                }
+            }
+        },
+        "CarResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price":{
+                    "type":"number"
+                },
+                "size":{
+                    "type":"string"
+                },
+                "picture_url": {
+                    "type":"string"
+                },
+                "createdBy":{
+                    "$ref": "#/definitions/UserLight"
+                },
+                "updatedBy":{
+                    "$ref": "#/definitions/UserLight"
+                },
+                "deletedBy":{
+                    "$ref": "#/definitions/UserLight"
+                },
+                "createdAt":{
+                    "type":"string"
+                },
+                "updatedAt":{
+                    "type":"string"
+                },
+                "deletedAt":{
+                    "type":"string"
+                }
+            }
+        },
+        "UserLogin": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password":{
+                    "type":"string"
+                }
+            }
+        },
+        "Role":{
+            "type":"object",
+            "properties": {
+                "id":{
+                    "type":"integer"
+                },
+                "name":{
+                    "type":"string"
+                }
+            }
+        },
+        "UserLight": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+      "Bearer": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header",
+        "description": "Enter your bearer token in the format **Bearer &lt;token>**"
+      }
+    }
+}
