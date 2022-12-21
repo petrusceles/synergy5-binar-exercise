@@ -1,4 +1,5 @@
 const { Car, User } = require("../models");
+const { Op } = require("sequelize");
 const CAR_ATTRIBUTES = {
   include: [
     {
@@ -105,6 +106,17 @@ class CarRepositories {
   }
 
   static async readAllCar({ query }) {
+    if (query.availableAt) {
+      query.availableAt = {
+        [Op.lte]: query.availableAt,
+      };
+    }
+    if (query.passenger) {
+      query.passenger = {
+        [Op.gte]: query.passenger
+      }
+    }
+    console.log(query);
     const cars = await Car.findAll({
       where: {
         ...query,

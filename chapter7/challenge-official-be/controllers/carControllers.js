@@ -88,6 +88,7 @@ const updateCar = async (req, res) => {
 
 const readAllCar = async (req, res) => {
   const query = req.query;
+  
   const { status, statusCode, message, data } =
     await carServices.readAllCarService({ query });
   return res.status(statusCode).json({

@@ -25,11 +25,11 @@ export default function Hero({ isRentPage }) {
             }
           })()}
         </div>
-        <div className="w-full relative -z-0 self-end lg:w-1/2">
+        <div className="w-full relative z-0 self-end lg:w-1/2">
           <img
             src="./mercedes.png"
             alt="mercedes"
-            className="bg-transparent 2xl:scale-125 2xl:pl-10"
+            className="bg-transparent 2xl:scale-100 2xl:pl-10"
           />
           <div className="w-full h-4/6 bg-blue-900 rounded-tl-[50px] absolute bottom-0 left-0 -z-10 2xl:scale-125"></div>
         </div>

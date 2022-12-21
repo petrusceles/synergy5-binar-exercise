@@ -1,14 +1,36 @@
 import React, { useEffect, useState } from "react";
 import Header from "../components/main/Header";
 import Hero from "../components/main/Hero";
+import Selector from "../components/main/Selector";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { BACKEND } from "../lib/const";
 import { addUser } from "../slices/userSlice";
+import CarSection from "../components/main/CarSection";
+
 export default function RentPage() {
   const dispatch = useDispatch();
+
+  //auth states
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [user, setUser] = useState({});
+
+  //component states
+  const [cars, setCars] = useState([]);
+
+  // const onClickFindCar = async (e, query) => {
+  //   e.preventDefault();
+  //   try {
+  //     const retrievedCars = await axios.get(`${BACKEND.URL}/api/car`, {
+  //       params: {
+  //         query,
+  //       },
+  //     });
+  //     console.log(retrievedCars)
+  //   } catch (err) {
+  //     console.log(err)
+  //   }
+  // };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -69,6 +91,16 @@ export default function RentPage() {
       <div className="pt-40 bg-blue-100">
         <div className="container mx-auto">
           <Hero isRentPage={true} />
+        </div>
+      </div>
+      <div className="relative z-[999]">
+        <div className="relative container mx-auto flex justify-center -top-10">
+          <Selector setCar={setCars} />
+        </div>
+      </div>
+      <div className="bg-blue-100">
+        <div className="container mx-auto flex justify-center">
+          <CarSection cars={cars}/>
         </div>
       </div>
     </>

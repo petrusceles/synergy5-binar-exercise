@@ -78,7 +78,7 @@ export default function Header({ username, isLoggedIn, logout }) {
                       return (
                         <Link to={"/"}>
                           <button
-                            className="bg-green-500 py-2 px-4 font-semibold text-lg text-white rounded-lg"
+                            className="bg-red-500 py-2 px-4 font-semibold text-lg text-white rounded-lg"
                             onClick={logout}
                           >
                             Logout
