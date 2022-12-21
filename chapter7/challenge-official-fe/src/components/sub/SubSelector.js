@@ -2,7 +2,7 @@ import React from "react";
 
 export default function SubSelector({ title, type, onChangeListener }) {
   return (
-    <div className=" w-1/5 min-w-[200px] flex flex-wrap gap-2">
+    <div className=" w-10/12 min-w-[200px] flex flex-wrap gap-2 lg:w-1/5">
       <p className="w-full font-light">{title}</p>
       <input
         type={type}

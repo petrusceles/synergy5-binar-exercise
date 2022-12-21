@@ -6,7 +6,7 @@ export default function Selector({ setCars }) {
   //state declarations
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
-  const [passenger, setPassenger] = useState("");
+  const [capacity, setCapacity] = useState("");
   const onChangeDate = (e) => {
     const value = e.target.value;
     setDate(value);
@@ -17,22 +17,20 @@ export default function Selector({ setCars }) {
   };
   const onChangePassenger = (e) => {
     const value = e.target.value;
-    setPassenger(value);
+    setCapacity(value);
   };
   const onClickFindCar = async (e) => {
     e.preventDefault();
     try {
       let queryObject = {};
       if (date && time) queryObject["availableAt"] = date + " " + time;
-      if (passenger) queryObject["passenger"] = passenger;
-      let responseCars = await axios.get(
-        `${BACKEND.URL}/api/car`,
-        {
-          params: queryObject,
-        }
-      );
+      if (capacity) queryObject["capacity"] = capacity;
+      let responseCars = await axios.get(`${BACKEND.URL}/api/car`, {
+        params: queryObject,
+      });
       let retrievedCars = responseCars.data.data.retrieved_car;
-      setCars(retrievedCars)
+      console.log(retrievedCars);
+      setCars(retrievedCars);
       // console.log(retrievedCars);
 
       // retrievedCars.forEach((e) => {
@@ -43,12 +41,12 @@ export default function Selector({ setCars }) {
       // }
       // console.log(retrievedCars);
     } catch (err) {
-      console.log(err);
+      setCars([]);
     }
   };
   return (
     <>
-      <div className="flex flex-wrap w-10/12 justify-center items-center px-10 py-5 gap-20 shadow-lg bg-white rounded-md">
+      <div className="flex flex-wrap w-10/12 justify-center py-5 gap-3 items-center shadow-lg lg:px-10 lg:py-5 lg:gap-20 bg-white rounded-md">
         <SubSelector
           title={"Tanggal"}
           type={"date"}
@@ -64,8 +62,8 @@ export default function Selector({ setCars }) {
           type={"number"}
           onChangeListener={onChangePassenger}
         />
-        <div className=" w-1/5 min-w-[200px] justify-center flex flex-wrap gap-2">
-          <p className="w-full font-light text-white">target</p>
+        <div className=" w-1/5 min-w-[200px] justify-center pt-3 lg:pt-0 flex flex-wrap gap-2">
+          <p className="w-full font-light text-white hidden xl:block">target</p>
           <button
             className="bg-green-400 w-full p-2 rounded-md border-2"
             onClick={(e) => onClickFindCar(e)}

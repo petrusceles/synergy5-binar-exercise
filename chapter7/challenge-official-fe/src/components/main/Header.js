@@ -7,7 +7,9 @@ export default function Header({ username, isLoggedIn, logout }) {
       <div className="container mx-auto">
         <div className="flex items-center justify-between w-full relative px-8">
           <div className="py-8">
-            <a href="#home" className="w-20 h-8 block bg-blue-900"></a>
+            <Link to={"/"}>
+              <div className="w-20 h-8 block bg-blue-900"></div>
+            </Link>
           </div>
 
           <div className="flex">

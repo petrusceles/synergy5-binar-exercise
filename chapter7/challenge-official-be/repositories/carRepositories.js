@@ -108,12 +108,12 @@ class CarRepositories {
   static async readAllCar({ query }) {
     if (query.availableAt) {
       query.availableAt = {
-        [Op.lte]: query.availableAt,
+        [Op.gte]: query.availableAt,
       };
     }
-    if (query.passenger) {
-      query.passenger = {
-        [Op.gte]: query.passenger
+    if (query.capacity) {
+      query.capacity = {
+        [Op.gte]: query.capacity
       }
     }
     console.log(query);
@@ -124,6 +124,7 @@ class CarRepositories {
       },
       ...CAR_ATTRIBUTES,
     });
+    console.log(cars)
     return cars;
   }
 

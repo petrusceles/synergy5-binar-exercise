@@ -7,6 +7,7 @@ import axios from "axios";
 import { BACKEND } from "../lib/const";
 import { addUser } from "../slices/userSlice";
 import CarSection from "../components/main/CarSection";
+import Footer from "../components/main/Footer";
 
 export default function RentPage() {
   const dispatch = useDispatch();
@@ -95,12 +96,17 @@ export default function RentPage() {
       </div>
       <div className="relative z-[999]">
         <div className="relative container mx-auto flex justify-center -top-10">
-          <Selector setCar={setCars} />
+          <Selector setCars={setCars} />
         </div>
       </div>
-      <div className="bg-blue-100">
+      <div>
         <div className="container mx-auto flex justify-center">
-          <CarSection cars={cars}/>
+          <CarSection cars={cars} />
+        </div>
+      </div>
+      <div>
+        <div className="container mx-auto flex justify-center">
+          <Footer />
         </div>
       </div>
     </>
