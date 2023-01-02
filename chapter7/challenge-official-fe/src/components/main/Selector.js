@@ -46,7 +46,7 @@ export default function Selector({ setCars }) {
   };
   return (
     <>
-      <div className="flex flex-wrap w-10/12 justify-center py-5 gap-3 items-center shadow-lg lg:px-10 lg:py-5 lg:gap-20 bg-white rounded-md">
+      <div className="flex flex-wrap w-10/12 justify-center py-5 gap-3 items-center shadow-lg lg:px-10 lg:py-5 lg:gap-20 bg-white rounded-md ">
         <SubSelector
           title={"Tanggal"}
           type={"date"}
@@ -63,7 +63,9 @@ export default function Selector({ setCars }) {
           onChangeListener={onChangePassenger}
         />
         <div className=" w-1/5 min-w-[200px] justify-center pt-3 lg:pt-0 flex flex-wrap gap-2">
-          <p className="w-full font-light text-white hidden xl:block">target</p>
+          <p className="w-full font-light text-white hidden 2xl:block">
+            target
+          </p>
           <button
             className="bg-green-400 w-full p-2 rounded-md border-2"
             onClick={(e) => onClickFindCar(e)}

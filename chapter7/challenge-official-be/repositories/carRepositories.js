@@ -113,8 +113,8 @@ class CarRepositories {
     }
     if (query.capacity) {
       query.capacity = {
-        [Op.gte]: query.capacity
-      }
+        [Op.gte]: query.capacity,
+      };
     }
     console.log(query);
     const cars = await Car.findAll({
@@ -124,7 +124,7 @@ class CarRepositories {
       },
       ...CAR_ATTRIBUTES,
     });
-    console.log(cars)
+    console.log(cars);
     return cars;
   }
 

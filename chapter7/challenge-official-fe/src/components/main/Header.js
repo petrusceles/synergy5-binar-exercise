@@ -1,7 +1,14 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Link } from "react-router-dom";
 
 export default function Header({ username, isLoggedIn, logout }) {
+  const navMenuRef = useRef();
+  const hamburgerButtonOnClick = () => {
+    navMenuRef.current.classList.replace("-right-[500px]", "right-0");
+  };
+  const closeButtonOnClick = () => {
+    navMenuRef.current.classList.replace("right-0", "-right-[500px]");
+  };
   return (
     <div className="w-full top-0 left-0 flex items-center absolute transition-all duration-200 ease-in-out">
       <div className="container mx-auto">
@@ -14,9 +21,8 @@ export default function Header({ username, isLoggedIn, logout }) {
 
           <div className="flex">
             <button
-              id="hamburger"
-              name="hamburger"
               type="button"
+              onClick={hamburgerButtonOnClick}
               className="block absolute bottom-1/4 right-6 top-1/4 lg:hidden"
             >
               <span className="hamburger-line"></span>
@@ -25,13 +31,13 @@ export default function Header({ username, isLoggedIn, logout }) {
             </button>
 
             <nav
-              id="nav-menu"
+              ref={navMenuRef}
               className="w-1/2 h-full fixed bg-white -right-[500px] z-[999] top-0 lg:bg-transparent lg:flex lg:absolute lg:w-3/4 transition-all duration-500 ease-in-out lg:right-0"
             >
               <ul className="block py-6 px-2 sm:px-5 md:px-10 lg:flex lg:items-center lg:w-full lg:justify-end">
                 <div className="p-4 xl:px-10 w-full flex justify-between lg:hidden">
                   <h2 className="font-semibold text-xl">BCR</h2>
-                  <button id="close">
+                  <button onClick={closeButtonOnClick}>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="16"

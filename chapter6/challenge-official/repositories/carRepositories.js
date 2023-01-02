@@ -5,17 +5,17 @@ const CAR_ATTRIBUTES = {
     {
       model: User,
       as: "createdBy",
-      attributes: ["name", "email"],
+      attributes: ["id", "name", "email"],
     },
     {
       model: User,
       as: "updatedBy",
-      attributes: ["name", "email"],
+      attributes: ["id", "name", "email"],
     },
     {
       model: User,
       as: "deletedBy",
-      attributes: ["name", "email"],
+      attributes: ["id", "name", "email"],
     },
   ],
   attributes: {
@@ -64,14 +64,9 @@ class CarRepositories {
   }
 
   static async readAllCar({ query }) {
-    const date = new Date("2020-12-12 00:00:00");
-    console.log(date);
+    // const date = new Date("2020-12-12 00:00:00");
+    // console.log(date);
     const cars = await Car.findAll({
-      where: {
-        availableAt: {
-          [Op.lt]: date,
-        },
-      },
       ...CAR_ATTRIBUTES,
     });
     return cars;
